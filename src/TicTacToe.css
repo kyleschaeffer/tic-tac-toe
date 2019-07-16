@@ -1,0 +1,16 @@
+.winner {
+  border: 3px dashed #eee;
+  border-radius: 50px;
+  padding: 2em 1em;
+  text-align: center;
+}
+
+.game {
+  padding: 15px;
+}
+
+.status {
+  color: #777;
+  font-size: 13px;
+  margin: 10px 0 30px;
+}
