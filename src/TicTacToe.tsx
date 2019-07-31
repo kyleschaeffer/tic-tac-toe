@@ -83,60 +83,39 @@ export default class TicTacToe extends React.Component<ITicTacToeProps, ITicTacT
   checkForWinners(): void {
     // Check for winning rows and columns
     for (let i = 0; i < this.props.size; i++) {
-      if (this.isWinningRow(i) || this.isWinningCol(i)) {
+      if (
+        this.isWinningVector(0, i, new Vector2(1, 0), this.state.board[0][i]) ||
+        this.isWinningVector(i, 0, new Vector2(0, 1), this.state.board[i][0])
+      ) {
         this.setState({ winner: this.state.currentPlayer });
         return;
       }
     }
 
     // Check for winning diagonals
-    if (this.isWinningDiagonalLeft() || this.isWinningDiagonalRight()) {
+    if (
+      this.isWinningVector(0, 0, new Vector2(1, 1), this.state.board[0][0]) ||
+      this.isWinningVector(this.props.size - 1, 0, new Vector2(-1, 1), this.state.board[0][this.props.size - 1])
+    ) {
       this.setState({ winner: this.state.currentPlayer });
       return;
     }
   }
 
-  isWinningRow(y: number): boolean {
-    const rowSymbol: string = this.state.board[y][0];
-    if (rowSymbol === '') return false; // Not marked
-    const matchRight = (x: number): boolean => {
-      if (x >= this.props.size) return true;
-      if (this.state.board[y][x] !== rowSymbol) return false;
-      else return matchRight(x + 1);
-    }
-    return matchRight(1);
+  isWinningVector(x: number, y: number, vector: Vector2, symbol: string): boolean {
+    if (symbol === '') return false;
+    if (x < 0 || x >= this.props.size || y < 0 || y >= this.props.size) return true;
+    if (this.state.board[y][x] !== symbol) return false;
+    return this.isWinningVector(x + vector.x, y + vector.y, vector, symbol);
   }
+}
 
-  isWinningCol(x: number): boolean {
-    const colSymbol: string = this.state.board[0][x];
-    if (colSymbol === '') return false; // Not marked
-    const matchDown = (y: number): boolean => {
-      if (y >= this.props.size) return true;
-      if (this.state.board[y][x] !== colSymbol) return false;
-      else return matchDown(y + 1);
-    }
-    return matchDown(1);
-  }
+export class Vector2 {
+  public x: number;
+  public y: number;
 
-  isWinningDiagonalLeft(): boolean {
-    const diagSymbol: string = this.state.board[0][0];
-    if (diagSymbol === '') return false; // Not marked
-    const matchDownRight = (x: number, y: number): boolean => {
-      if (x >= this.props.size || y >= this.props.size) return true;
-      if (this.state.board[y][x] !== diagSymbol) return false;
-      else return matchDownRight(x + 1, y + 1);
-    }
-    return matchDownRight(1, 1);
-  }
-
-  isWinningDiagonalRight(): boolean {
-    const diagSymbol: string = this.state.board[0][this.props.size - 1];
-    if (diagSymbol === '') return false; // Not marked
-    const matchDownLeft = (x: number, y: number): boolean => {
-      if (x < 0 || y >= this.props.size) return true;
-      if (this.state.board[y][x] !== diagSymbol) return false;
-      else return matchDownLeft(x - 1, y + 1);
-    }
-    return matchDownLeft(this.props.size - 2, 1);
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
   }
 }
