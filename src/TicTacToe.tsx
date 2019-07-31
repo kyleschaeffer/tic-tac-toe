@@ -84,8 +84,8 @@ export default class TicTacToe extends React.Component<ITicTacToeProps, ITicTacT
     // Check for winning rows and columns
     for (let i = 0; i < this.props.size; i++) {
       if (
-        this.isWinningVector(0, i, new Vector2(1, 0), this.state.board[0][i]) ||
-        this.isWinningVector(i, 0, new Vector2(0, 1), this.state.board[i][0])
+        this.isWinningVector(0, i, new Vector2(1, 0), this.state.board[i][0]) ||
+        this.isWinningVector(i, 0, new Vector2(0, 1), this.state.board[0][i])
       ) {
         this.setState({ winner: this.state.currentPlayer });
         return;
